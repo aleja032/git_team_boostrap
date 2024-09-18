@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <form action="" id="id_form1">
+        <input type="text" name="hola" id="in">
+
+        <button type="button" onclick="enviar_datos_()"></button>
+    </form>
+
+    <div class="div1" id="a1">hola
+        <input type="text" name="f" id="mo">
+    </div>
+</body>
+</html>
+<script>
+
+/*JAVA SCRIPS JQUERY (AJAX) PARA ENVIAR FORMULARIOS SIN REDIRIGIR A LA PAGINA*/
+
+
+    $(document).ready(function() {
+        // Función que se ejecuta cuando se envía un formulario
+        $("#id_form1").submit(function(event) {
+
+        event.preventDefault(); // Prevenir la acción predeterminada del envío del formulario (redireccionamiento)
+        
+        //var form_id = $(this).data('form'); // Obtener el identificador único del formulario
+        
+            $.ajax({
+                url: 'registrarusuario.php', // Ruta a tu script PHP que procesará los datos
+                type: 'POST', // Método HTTP que se utilizará para enviar la solicitud
+                data: $(this).serialize(),  // Datos que se enviarán con la solicitud (en este caso, los datos del formulario y el identificador único)
+
+                /*AQUI SE MANEJA LA RESPUESTA DEL SERVIDOR*/
+                success: function(rp) {
+                    console.log(rp);
+                    alert("el valor se incorrecto");
+                    // se especifica la id del contenedor donse se van a mostrar los datos
+                    $('#otrocontenedor').html(rp);
+                },
+            });
+        });
+    });
+
+    /*este enfoque se utiliza para elementos fuera de un formulario*/
+    $(document).on('click', '.div1', function() {
+            var id = $(this).data('id');
+            var valor = document.getElementById("mo").value;
+            $.ajax({
+                url: 'registrarusuario.php', 
+                type: 'POST',
+                data: {mt:valor},
+                success: function(response) {
+                    document.getElementById("a1").style.width="900px";
+                    document.getElementById("a1").style.height="900px";
+                    document.getElementById("a1").style.background="green";
+                    document.getElementById("a1").style.border="10px solid red";
+                },
+            });
+        });
+
+    /*este enfoque se utiliza para cambios de un  elemento (inputs) selects*/
+        $('#in').on('change', function () {
+            //var in_id = $(this).data('cantidad');
+            //var can = $(this).val();
+            var in_id= document.getElementById("in").value;
+            $.ajax({
+                url: 'registrarusuario.php',
+                type: 'POST',
+                data: {'in_id': in_id},
+                success: function (respuesta) {
+                    console.log(respuesta);
+                    if(respuesta == "sirve"){
+
+                        var nuevoDiv = document.createElement("div");
+
+                        // Agregar contenido al div (opcional)
+                        nuevoDiv.textContent = "Este es un nuevo div";
+
+                        // Establecer atributos o estilos (opcional)
+                        nuevoDiv.style.backgroundColor = "lightblue";
+                        nuevoDiv.style.padding = "10px";
+                        nuevoDiv.id = "miNuevoDiv";
+
+                        // Añadir el div al cuerpo del documento
+                        document.body.appendChild(nuevoDiv);
+                    }
+ 
+
+                }
+            });
+        });
+
+
+
+    /* AJAX NORMAL, SIRVE DEPENDIENDO DEL ENFOQUE */
+    /*
+    function enviar_datos_(){
+        $.ajax({
+           url: '', // Ruta a tu script PHP que procesará los datos
+           type: 'POST', // Método HTTP que se utilizará para enviar la solicitud
+           data: $(this).serialize(),  // Datos que se enviarán con la solicitud (en este caso, los datos del formulario y el identificador único)
+           success: function(respuesta) {
+             $('#'+Respuesta).html(respuesta);
+             console.log(respuesta);
+             
+           },
+    });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $('.inputt').on('change', function () {
+    var in_id = $(this).data('cantidad');
+    var can = $(this).val();
+    $.ajax({
+        url: 'actualizar.php',
+        type: 'POST',
+        data: {'in_id': in_id, 'can': can},
+        success: function (esta) {
+            $("#parte1").html(esta);
+        }
+    });
+});
+
+
+
+
+
+
+
+$(document).on('click', '.'+ClassBoton, function() {
+            var id = $(this).data('id');
+            $.ajax({
+                url: ''+Url, 
+                type: 'POST',
+                data: { id: id },
+                success: function(response) {
+                    console.log(response);
+                    $('#'+Respuesta).html(response);
+                    CambiarVista(""+Respuesta);
+                },
+            });
+        });
+*/
+</script>
